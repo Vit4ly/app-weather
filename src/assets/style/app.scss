@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+@import './reset';
+@import './var';
+
+
+body {
+  font-size: 14px;
+  font-weight: 400;
+  font-family: 'Lato', sans-serif;
+  color: $primary;
+
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+  height: 100%;
+  @media (max-width: $tablet-smallS) {
+  width: 90%;
+  }
+}
+
+.input {
+  font-size: 24px;
+  width: 100%;
+  border-bottom: 1px solid $primary;
+  padding-bottom: 10px;
+
+  &::placeholder {
+//    font-size: 24px;
+   font-weight: 500;
+   color: $opacityGray;
+
+  }
+  &:focus {
+  border-bottom: 1px solid $purple;
+  }
+}
+.button {
+ font-size: 16px;
+ font-weight: 700;
+ color: $opacityGray;
+ cursor: pointer;
+ transition: all .3s;
+ &--active {
+  color: $purple;
+      &:hover {
+      color: $purpleLight;
+      }
+ }
+}
+
+

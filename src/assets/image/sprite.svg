@@ -1,0 +1,10 @@
+<svg width="0" height="0" class="hidden">
+
+    <symbol
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 14 14"
+            id="plus">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill="white" fill-opacity="0.87"></path>
+    </symbol>
+</svg>
