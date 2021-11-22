@@ -15,6 +15,3 @@ export const countryCode = {
   CZ: 'Czech',
   NL: 'Netherlands'
 }
-export const city = [
-
-]

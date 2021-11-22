@@ -34,7 +34,6 @@
       @close="closeModal"
       @city="addCity"
       :list="cardList"
-      :request="requestCity"
     />
     <AppSpinner v-if="isActiveSpinner"/>
   </div>
@@ -45,7 +44,7 @@ import AppModal from '@/components/AppModal'
 import ButtonModal from '@/components/ButtonModal'
 import AppCard from '@/components/AppCard'
 import AppSpinner from '@/components/AppSpinner'
-import { ref, reactive, computed, watch, onUpdated } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { REQUEST_CITY_WEATHER, REQUEST_WEATHER_LAT_LON } from './store/actions'
 import { REQUEST_GEO_POSITION } from './store/mutations'
 
@@ -57,7 +56,6 @@ export default {
     const isActiveSpinner = ref(false)
     const cardList = reactive(new Map())
     const geoPosition = ref(false)
-    const requestCity = ref(false)
     const options = {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -71,12 +69,7 @@ export default {
     const toggleSpinner = (flag) => {
       isActiveSpinner.value = flag
     }
-    watch(() => requestCity.value, (c, n) => {
-      console.log(c, n)
-    })
-    onUpdated(() => {
-      console.log(123)
-    })
+
     toggleSpinner(true)
 
     const setStorage = (list) => {
@@ -84,7 +77,6 @@ export default {
     }
 
     function addedNewCity (city) {
-      console.log(city)
       cardList.set(city.name, city)
       setStorage(cardList)
     }
@@ -126,14 +118,9 @@ export default {
     const addCity = async (city) => {
       toggleSpinner(true)
       await REQUEST_CITY_WEATHER(city).then(el => {
-        console.log(el)
-        console.log(typeof el === 'object')
-        if (typeof el === 'object') {
-          requestCity.value = false
+        if (el) {
           addedNewCity(el)
           setTimeout(() => toggleSpinner(false), 1000)
-        } else {
-          requestCity.value = false
         }
       })
     }
@@ -166,7 +153,6 @@ export default {
     setTimeout(() => toggleSpinner(false), 1000)
     return {
       isActiveModal,
-      requestCity,
       cardList,
       isActiveSpinner,
       arrayFomMap,

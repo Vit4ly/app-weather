@@ -61,15 +61,13 @@ import SimpleButton from '@/components/SimpleButton'
 import useVuelidate from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
 import { computed, reactive, ref } from 'vue'
+import { REQUEST_CITY_WEATHER } from '@/store/actions'
 
 export default {
   name: 'AppModal',
   emits: ['close', 'city', 'checked'],
   props: {
     list: {
-      type: Object
-    },
-    request: {
       type: Object
     }
   },
@@ -103,14 +101,20 @@ export default {
         message.value = `City ${city.value} has already been added`
         // eslint-disable-next-line no-return-assign
         setTimeout(() => message.value = '', 3000)
-      } else if (prop.request.flag) {
-        emit('city', city.value)
-        city.value = ''
-        message.value = ''
-        closeModal()
-      } else {
-        message.value = prop.request.message
       }
+      // else if (prop.request.flag) {
+      await REQUEST_CITY_WEATHER(city.value).then(el => {
+        if (typeof el === 'string') {
+          message.value = 'City not found'
+          // eslint-disable-next-line no-return-assign
+          setTimeout(() => message.value = '', 6000)
+        } else {
+          emit('city', city.value)
+          city.value = ''
+          message.value = ''
+          closeModal()
+        }
+      })
     }
 
     const updateMessage = computed(() => message.value)
@@ -123,7 +127,6 @@ export default {
       }
     }
     const v$ = useVuelidate(rules, { city })
-    console.log(v$)
     return {
       city,
       clearInput,
@@ -145,7 +148,6 @@ export default {
 
 <style scoped lang="scss">
 @import '../assets/style/var';
-@import '../assets/style/mixins';
 
 .modal {
   position: relative;
@@ -205,10 +207,6 @@ export default {
       align-items: center;
       gap: 31px;
     }
-  }
-
-  &__button {
-
   }
 }
 

@@ -30,7 +30,6 @@ export default {
 
   setup (prop, { emit }) {
     const emitHandler = () => {
-      console.log(true)
       emit('action', true)
     }
     return {
