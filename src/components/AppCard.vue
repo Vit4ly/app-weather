@@ -37,10 +37,9 @@
 
 <script>
 import SimpleButton from '@/components/SimpleButton'
-import { countryCode } from '../store/state.js'
+import { countryCode } from '@/store/state'
 import moment from 'moment'
-// import _ from 'lodash'
-import { ref, computed, onDeactivated } from 'vue'
+import { ref, computed, onDeactivated, reactive } from 'vue'
 
 export default {
   name: 'AppCard',
@@ -59,18 +58,23 @@ export default {
     const isActiveCard = ref(false)
     const timeMessage = ref('')
     const intervalId = ref(null)
+    const time = reactive(moment())
+    const setCurrentTime = () => {
+      timeMessage.value = time.fromNow()
+    }
 
     const updateTime = () => {
       intervalId.value = setInterval(() => {
-        timeMessage.value = moment().startOf(prop.card.date).fromNow()
+        setCurrentTime()
       }, 60000)
     }
+    updateTime()
 
     if (prop.card === undefined && prop.select) {
       emit('spinner', true)
     } else {
       emit('spinner', false)
-      timeMessage.value = moment().startOf(prop.card.date).fromNow()
+      setCurrentTime()
       updateTime()
     }
 

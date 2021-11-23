@@ -3,28 +3,30 @@
     <div class="container">
       <h1 class="app__title">World Weather</h1>
       <p class="app__sub-title">Watch weather in your current location</p>
-      <div class="app__main" v-if="cardList.size">
-        <div class="app__main__body" v-for="(el, idx) in arrayFomMap" :key="symbolIdx(idx)">
-          <AppCard
-            v-if="el.select"
-            :card="el"
-            :select="true"
-            @reload="reloadCard"
-          />
+      <keep-alive>
+        <div class="app__main" v-if="cardList.size">
+          <div class="app__main__body" v-for="(el, idx) in arrayFomMap" :key="symbolIdx(idx)">
+            <AppCard
+              v-if="el.select"
+              :card="el"
+              :select="true"
+              @reload="reloadCard"
+            />
+          </div>
+          <div class="app__main__footer">
+            <AppCard
+              v-for="(el, idx) in arrayFomMap"
+              :key="symbolIdx(idx)"
+              @spinner="toggleSpinner"
+              :card="el"
+              :select="false"
+              @remove="removeCard"
+              @reload="reloadCard"
+              @select="selectedCard"
+            />
+          </div>
         </div>
-        <div class="app__main__footer">
-          <AppCard
-            v-for="(el, idx) in arrayFomMap"
-            :key="symbolIdx(idx)"
-            @spinner="toggleSpinner"
-            :card="el"
-            :select="false"
-            @remove="removeCard"
-            @reload="reloadCard"
-            @select="selectedCard"
-          />
-        </div>
-      </div>
+      </keep-alive>
     </div>
     <div class="app__button">
       <ButtonModal @open="openModal"/>
@@ -44,9 +46,9 @@ import AppModal from '@/components/AppModal'
 import ButtonModal from '@/components/ButtonModal'
 import AppCard from '@/components/AppCard'
 import AppSpinner from '@/components/AppSpinner'
-import { ref, reactive, computed } from 'vue'
 import { REQUEST_CITY_WEATHER, REQUEST_WEATHER_LAT_LON } from './store/actions'
 import { REQUEST_GEO_POSITION } from './store/mutations'
+import { ref, reactive, computed } from 'vue'
 
 export default {
   name: 'App',
@@ -86,6 +88,7 @@ export default {
       coords.lat = pos.coords.latitude
       coords.lon = pos.coords.longitude
       REQUEST_WEATHER_LAT_LON(coords).then(el => {
+        el.select = true
         addedNewCity(el)
       })
     }

@@ -6,7 +6,6 @@ export async function REQUEST_CITY_WEATHER (city) {
     const response = await fetch(URL)
     const result = await response.json()
     if (response.ok) {
-      result.date = new Date()
       return result
     } else if (response.status === 404) {
       return result.message
@@ -22,8 +21,6 @@ export async function REQUEST_WEATHER_LAT_LON (coords) {
     const response = await fetch(URL)
     const result = await response.json()
     if (response.ok) {
-      result.date = new Date()
-      result.select = true
       return result
     } else {
       return result.message
